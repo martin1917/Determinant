@@ -3,35 +3,42 @@ using namespace std;
 
 void fill(int **mat, int n); //заполнение матрицы различными числами
 void print(int **mat, int n); //вывод исходной матрицы
-void make_new_matrix(int **mat, int pos, int n, int **&current_mat); // создание матрицы на 1 размерность меньше
+void make_new_matrix(int **mat, int pos, int n, int **&tmp_mat); // создание матрицы на 1 размерность меньше
 int sign(int n); // Знак перед минором
-int Determinant(int **arr, int size, int **&current_mat); //основная функция подсчета. Ищем по разложению первой строки
+int Determinant(int **arr, int size, int **&tmp_mat); //основная функция подсчета. Ищем по разложению первой строки
 
 int main(int argc, char* argv[])
 {
-    srand(15);
-    int n;
-    cin >> n;
+    int n; //размерность матрицы
+    int **mat; //матрица
+    int **tmp_mat; // матрица на 1 размерность меньше предыдущей
 
-    int **current_mat;          //матрица размерностью меньше
-    int **mat = new int *[n];
+    cout<< "Enter matrix size: ";
+    cin >> n;
+    cout << endl;
+
+    mat = new int *[n];
     for(int i = 0; i < n; i++)
     {
         mat[i] = new int[n];
     }
-    fill(mat, n);
-    cout << "\n";
-    print(mat, n);
-    cout << "\n\n" << endl;
 
-    cout << Determinant(mat, n, current_mat) << endl;
+    cout<< "Fill matrix \n" << endl;
 
-
-
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            cin >> mat[i][j];
+        }
+        
+    }
+   
+    cout << "\nDeterminant = " <<Determinant(mat, n, tmp_mat) << endl;
     system("pause");
 }
 
-int Determinant(int **arr, int size, int **&current_mat)
+int Determinant(int **arr, int size, int **&tmp_mat)
 {
     int s = 0;
     if(size == 1) return arr[0][0]; // доделать
@@ -39,20 +46,20 @@ int Determinant(int **arr, int size, int **&current_mat)
     {
         for (int j = 0; j < size; j++)
         {
-            make_new_matrix(arr, size, j, current_mat);
-            s += arr[0][j] * sign(j) * Determinant(current_mat, size - 1, current_mat);
+            make_new_matrix(arr, size, j, tmp_mat);
+            s += arr[0][j] * sign(j) * Determinant(tmp_mat, size - 1, tmp_mat);
         }  
     }
 
     return s;
 }
 
-void make_new_matrix(int **mat, int size, int pos, int **&current_mat)
+void make_new_matrix(int **mat, int size, int pos, int **&tmp_mat)
 {
-    current_mat = new int *[size-1];
+    tmp_mat = new int *[size-1];
     for (int i = 0; i < size-1; i++)
     {
-        current_mat[i] = new int[size-1];
+        tmp_mat[i] = new int[size-1];
     }
     
     int row = 0, col = 0;
@@ -62,35 +69,12 @@ void make_new_matrix(int **mat, int size, int pos, int **&current_mat)
         for(int j = 0; j < size; j++)
         {
             if(j == pos) continue;
-            current_mat[row][col] = mat[i][j];
+            tmp_mat[row][col] = mat[i][j];
             col++;
         }
         row++;
         col = 0;
     } 
-}
-
-void fill(int **mat, int n)
-{
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            mat[i][j] = rand() % 10;
-        }
-    }
-}
-
-void print(int **mat, int n)
-{
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            cout << mat[i][j] << " ";
-        }
-        cout << endl;
-    }
 }
 
 int sign(int n)
