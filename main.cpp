@@ -1,8 +1,6 @@
 #include<iostream>
 using namespace std;
 
-void fill(int **mat, int n); //заполнение матрицы различными числами
-void print(int **mat, int n); //вывод исходной матрицы
 void make_new_matrix(int **mat, int pos, int n, int **&tmp_mat); // создание матрицы на 1 размерность меньше
 int sign(int n); // Знак перед минором
 int Determinant(int **arr, int size, int **&tmp_mat); //основная функция подсчета. Ищем по разложению первой строки
@@ -23,7 +21,7 @@ int main(int argc, char* argv[])
         mat[i] = new int[n];
     }
 
-    cout<< "Fill matrix \n" << endl;
+    cout<< "Fill matrix:\n" << endl;
 
     for (int i = 0; i < n; i++)
     {
